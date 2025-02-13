@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:insert="~{fragment :: head}"></head>
+
 <body>
   <main>
     <navbar th:insert="~{fragment :: navbar}"></navbar>
@@ -8,9 +10,13 @@
     <div th:if="${param.notAuthorized}">
       <div class="alert alert-danger">You are not authorized</div>
     </div>
-    
+    <div th:if="${successMessage}" class="alert alert-success">
+      <p th:text="${successMessage}"></p>
+    </div>
+
     <footer th:insert="~{fragment :: footer}"></footer>
     <script th:replace="~{fragment :: bootstrapJS}"></script>
-  </main>  
+  </main>
 </body>
+
 </html>
