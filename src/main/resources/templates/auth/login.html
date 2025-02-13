@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragment :: head}"></head>
+<body>
+    <main>
+        <nav th:replace="~{fragment :: navbar}"></nav>
+        <div class="container vh-100 mb-5">
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 col-md-8 text-center">
+                    <h1>Login</h1>
+                </div>
+                <div th:if="${param.logout}" class="col-12 col-md-10">
+                    <div class="alert alert-info" role="alert">
+                        You have been logged out.
+                    </div>
+                </div>
+                <div th:if="${param.error}" class="col-12 col-md-10">
+                    <div class="alert alert-danger" role="alert">
+                        Invalid email or password.
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    <!-- Form di login -->
+                    <form th:action="@{/login}" method="post" th:object="${user}">
+                        <!-- Campo Email -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="username">Email</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Email">
+                        </div>
+                        <!-- Campo Password -->
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="password">
+                        </div>
+                        <!-- Bottone di submit -->
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <span>Don't have an account? <a th:href="@{/register}">Register</a></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="~{fragment :: footer}"></footer>
+        <script th:replace="~{fragment :: bootstrapJS}"></script>
+    </main>
+</body>
+</html>
