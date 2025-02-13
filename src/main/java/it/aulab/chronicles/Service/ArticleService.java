@@ -2,6 +2,7 @@ package it.aulab.chronicles.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public List<ArticleDTO> readAll() {
         // TODO Auto-generated method stub
@@ -42,6 +46,8 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
 
     @Override
     public ArticleDTO create(Article article, Principal principal, MultipartFile file) {
+        String url = "";
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null){
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -49,7 +55,20 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
             article.setUser(user);
         }
 
+        if(!file.isEmpty()){
+            try {
+                CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                url = futureUrl.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
         ArticleDTO dto = modelMapper.map(articleRepository.save(article), ArticleDTO.class);
+        if(!file.isEmpty()){
+            imageService.saveImageOnDb(url, article);
+        }
         return dto;
     }
 

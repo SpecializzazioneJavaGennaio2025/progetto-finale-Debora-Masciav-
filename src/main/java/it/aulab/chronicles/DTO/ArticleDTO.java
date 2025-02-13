@@ -3,6 +3,7 @@ package it.aulab.chronicles.DTO;
 import java.time.LocalDate;
 import java.util.Locale.Category;
 
+import it.aulab.chronicles.Model.Image;
 import it.aulab.chronicles.Model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,5 @@ public class ArticleDTO {
     private LocalDate publishDate;
     private User user;
     private Category category;
+    private Image image;
 }
