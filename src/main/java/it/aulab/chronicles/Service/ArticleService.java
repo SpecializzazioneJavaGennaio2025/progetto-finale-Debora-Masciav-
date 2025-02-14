@@ -3,14 +3,17 @@ package it.aulab.chronicles.Service;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import it.aulab.chronicles.DTO.ArticleDTO;
 import it.aulab.chronicles.Model.Article;
@@ -46,8 +49,12 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
 
     @Override
     public ArticleDTO read(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        Optional<Article> optArticle = articleRepository.findById(key);
+        if (optArticle.isPresent()) {
+            return modelMapper.map(optArticle.get(), ArticleDTO.class);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author id" + key + "not found");
+        }
     }
 
     @Override

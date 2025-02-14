@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragment :: head}" />
+
+<body>
+    <main>
+        <nav th:insert="~{fragment :: navbar}" />
+      <div class="container-fluid min-vh-100 p-5 bg-secondary-subtle">
+        <div th:insert="~{fragment :: successMessage}"/>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <span>In dettaglio: </span>
+                <h2 th:text="${article.title}">Titolo</h2>
+            </div>
+        </div>
+      </div>
+      <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 d-flex flex-column">
+                <div class="carousel slide">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img th:if="${article.image != null}" th:src="@{$article.image.path}" th:alt="${article.title}" class="card-img-top">
+                            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" th:alt="${article.title}" class="card-img-top">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                </div>
+
+                <div class="text-center">
+                    <h2 th:text="${article.subtitle}"></h2>
+                    <p class="fs-5">Categoria: <a th:href="@{/categories/search/{id}(id=${article.category.id})}" class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">categoria</a></p>
+                    <p class="fs-5" th:if="${article.category == null}">Nessuna categoria</p>
+
+                    <div class="text-muted my-3">
+                        <p>Redatto il: <p th:text="${article.publishDate}">data</p></p>
+                        <a class="text-muted"><p th:text="${article.user.username}">User</p>
+                        </a>
+                    </div>
+                </div>
+                <br>
+                <p th:text="${article.body}">testo</p>
+                <div class="text-center">
+                    <a href="#" class="pointer text-secondary" onclick="goBack()">Torna indietro</a>
+                </div>
+            </div>
+        </div>        
+      </div>
+
+      <footer th:insert="~{fragment :: footer}"/>
+      <script th:replace="~{fragment :: bootstrapJS}"/>
+      <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </main>
+</body>
+
+</html>

@@ -29,10 +29,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authorize) -> authorize.requestMatchers("/").permitAll()
-                        .requestMatchers("/register/**").permitAll().requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/auth/store").permitAll().requestMatchers("/register").permitAll()
-                        .requestMatchers("/login").permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/", "/register", "/auth/store", "/login", "/article/index", "/images/**", "article/detail/**", "/error/**").permitAll()
+                        // .requestMatchers("/").permitAll()
+                        // .requestMatchers("/register/**").permitAll()
+                        // .requestMatchers("/auth/store").permitAll()
+                        // .requestMatchers("/register").permitAll()
+                        // .requestMatchers("/login").permitAll()
+                        // .requestMatchers("/article/index").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)

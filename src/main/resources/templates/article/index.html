@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragment :: head}"/>
+<body>
+    <nav th:insert="~{fragment :: navbar}"/>
+<div class="container min-vh-100">
+    <div th:insert="~{fragment :: successMessage}"/>
+
+    <div class="row justify-content-center my-5">
+        <div class="col-10 mb-5">
+            <h1 th:text="${title}" class="text-center">Articoli</h1>
+        </div>
+    </div>
+    <div th:if="${!articles.isEmpty()}" class="row justify-content-center mb-5">
+        <div th:each="article, stat :${articles}" class="col-12 col-md-6 d-flex justify-content-center">
+                <div th:class="card">
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <div th:class="${stat.index % 2 != 0} ? ' card-block text-start' : 'text-end card-block'">
+                          <!--           <h4 class="card-title">Small card</h4> -->
+                          <h5 th:text="${article.title}"></h5>
+                          <p class="fst-italic" th:text="${article.subtitle}">Change around the content for awsomenes</p>
+                          <a th:href="@{article/detail/{id}(id=${article.id})}" class="btn btn-primary btn-sm">Read More</a>
+                        </div>
+                      </div>                
+                      <div class="col-sm-5">
+                        <img class="d-block w-100" th:if="${article.image != null}" th:src="@{${article.image.path}}" th:alt="${article.title}">
+                        <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"  class="d-block w-100" th:alt="${article.title}">
+                      </div>
+                    </div>
+                  </div>
+            
+        </div>
+    </div>
+</div>
+
+
+<footer th:insert="~{fragment :: footer}"/>
+<script th:replace="~{fragment :: bootstrapJS}"/>
+</body>
+</html>

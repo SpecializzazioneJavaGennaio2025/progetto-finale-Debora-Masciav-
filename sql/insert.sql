@@ -5,6 +5,6 @@ insert into roles (name) values ('ROLE_USER');
 insert into roles (name) values ('ROLE_WRITER');
 insert into roles (name) values ('ROLE_REVISOR');
 
-insert INTO user_roles (user_id, role_id) VALUES (1, 1);
+insert INTO users_roles (user_id, role_id) VALUES (1, 1);
 
 insert into categories (name) values ('politica'), ('economia'), ('food&drink'), ('sport'), ('intrattenimento'), ('tech');
