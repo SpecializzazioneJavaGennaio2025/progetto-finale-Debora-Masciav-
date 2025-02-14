@@ -1,6 +1,7 @@
 package it.aulab.chronicles.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,8 +35,13 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
 
     @Override
     public List<ArticleDTO> readAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readAll'");
+        List<ArticleDTO> dtos = new ArrayList<ArticleDTO>();
+        for (Article article : articleRepository.findAll()) {
+            dtos.add(modelMapper.map(article, ArticleDTO.class));
+
+            
+        }
+        return dtos;
     }
 
     @Override
