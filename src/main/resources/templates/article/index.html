@@ -11,16 +11,16 @@
             <h1 th:text="${title}" class="text-center">Articoli</h1>
         </div>
     </div>
-    <div th:if="${!articles.isEmpty()}" class="row justify-content-center mb-5">
+    <div th:if="${!articles.isEmpty()}" class="row  mb-5">
         <div th:each="article, stat :${articles}" class="col-12 col-md-6 d-flex justify-content-center">
-                <div th:class="card">
+                <div class="card mb-3">
                     <div class="row">
-                      <div class="col-sm-7">
+                      <div class="col-sm-7 p-4">
                         <div th:class="${stat.index % 2 != 0} ? ' card-block text-start' : 'text-end card-block'">
                           <!--           <h4 class="card-title">Small card</h4> -->
                           <h5 th:text="${article.title}"></h5>
                           <p class="fst-italic" th:text="${article.subtitle}">Change around the content for awsomenes</p>
-                          <a th:href="@{article/detail/{id}(id=${article.id})}" class="btn btn-primary btn-sm">Read More</a>
+                          <a th:href="@{detail/{id}(id=${article.id})}" class="btn btn-primary btn-sm">Read More</a>
                         </div>
                       </div>                
                       <div class="col-sm-5">

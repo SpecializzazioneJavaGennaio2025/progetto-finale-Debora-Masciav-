@@ -1,8 +1,8 @@
 package it.aulab.chronicles.DTO;
 
 import java.time.LocalDate;
-import java.util.Locale.Category;
 
+import it.aulab.chronicles.Model.Category;
 import it.aulab.chronicles.Model.Image;
 import it.aulab.chronicles.Model.User;
 import lombok.Getter;

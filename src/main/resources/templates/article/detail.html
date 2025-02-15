@@ -4,9 +4,9 @@
 <head th:insert="~{fragment :: head}" />
 
 <body>
-    <main>
+    <main class="min-vh-100 ">
         <nav th:insert="~{fragment :: navbar}" />
-      <div class="container-fluid min-vh-100 p-5 bg-secondary-subtle">
+      <div class="container-fluid p-5 bg-secondary-subtle">
         <div th:insert="~{fragment :: successMessage}"/>
         <div class="row justify-content-center">
             <div class="col-12">
@@ -38,11 +38,15 @@
                 <div class="text-center">
                     <h2 th:text="${article.subtitle}"></h2>
                     <p class="fs-5">Categoria: <a th:href="@{/categories/search/{id}(id=${article.category.id})}" class="text-capitalize fw-bold text-muted" th:text="${article.category.name}">categoria</a></p>
-                    <p class="fs-5" th:if="${article.category == null}">Nessuna categoria</p>
+                    <p class="fs-5 " th:if="${article.category == null}">Nessuna categoria</p>
 
                     <div class="text-muted my-3">
-                        <p>Redatto il: <p th:text="${article.publishDate}">data</p></p>
-                        <a class="text-muted"><p th:text="${article.user.username}">User</p>
+                        <span>Redatto il: </span><span th:text="${article.publishDate}">data</span>
+                        <br>
+                        <span>Autore: </span>
+                        <a class="text-muted"
+                            th:href="@{/search/{id}(id=${article.user.id})}">
+                            <span th:text="${article.user.username}">User</span>
                         </a>
                     </div>
                 </div>

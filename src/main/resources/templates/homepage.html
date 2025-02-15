@@ -4,7 +4,7 @@
 <head th:insert="~{fragment :: head}"></head>
 
 <body>
-  <main>
+  <main class="min-vh-100">
     <navbar th:insert="~{fragment :: navbar}"></navbar>
 
     <div class="container">
@@ -20,12 +20,49 @@
       </div>
     </div>
 
-    <div class="container min-vh-100">
-      <div class="row">
-        <div class="col-12 col-md-6">
+    <div class="container-fluid">
+      <div class="row ms-5 vh-100 align-items-center">
+        <div class="col-10">
+          <h1 class="mb-5">Welcome to <span class="display-4 fw-bold d-block">The Aulab Chronicle</span></h1>
         </div>
       </div>
     </div>
+
+    <div class="container" th:if="${!articles.isEmpty()}">
+      <div class="row justify-content-center">
+        <div class="col-10 mb-5">
+          <h1 class="text-center">Gli ultimi articoli</h1>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-5">
+        <!-- <div th:each="article:${articles}" class="col-12 col-md-6 d-flex justify-content-center"> -->
+          <div th:if="${!articles.isEmpty()}" class="row  mb-5">
+            <div th:each="article, stat :${articles}" class="col-12 col-md-6 d-flex justify-content-center">
+                    <div class="card mb-3">
+                        <div class="row">
+                          <div class="col-sm-7 p-4">
+                            <div th:class="${stat.index % 2 != 0} ? ' card-block text-start' : 'text-end card-block'">
+                              <!--           <h4 class="card-title">Small card</h4> -->
+                              <h5 th:text="${article.title}"></h5>
+                              <p class="fst-italic" th:text="${article.subtitle}">Change around the content for awsomenes</p>
+                              <a th:href="@{detail/{id}(id=${article.id})}" class="btn btn-primary btn-sm">Leggi</a>
+                            </div>
+                          </div>                
+                          <div class="col-sm-5">
+                            <img class="d-block w-100" th:if="${article.image != null}" th:src="@{${article.image.path}}" th:alt="${article.title}">
+                            <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"  class="d-block w-100" th:alt="${article.title}">
+                          </div>
+                        </div>
+                      </div>
+                
+            </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+
     <footer th:insert="~{fragment :: footer}"></footer>
     <script th:replace="~{fragment :: bootstrapJS}"></script>
   </main>
