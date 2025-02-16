@@ -15,7 +15,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.aulab.chronicles.DTO.ArticleDTO;
 import it.aulab.chronicles.DTO.UserDTO;
 import it.aulab.chronicles.Model.User;
+import it.aulab.chronicles.Repository.CareerRequestRepository;
 import it.aulab.chronicles.Service.ArticleService;
+import it.aulab.chronicles.Service.CategoryService;
 import it.aulab.chronicles.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +32,13 @@ public class UserController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private CareerRequestRepository careerRequestRepository;
+
+    @Autowired
+    private CategoryService categoryService;
+
+
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("user", new UserDTO());
@@ -41,6 +50,7 @@ public class UserController {
         return "auth/login";
     }
 
+    @SuppressWarnings("null")
     @PostMapping("/auth/store")
     public String store(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response){
         User existingUser = userService.findUserByEmail(userDTO.getEmail());
@@ -68,6 +78,15 @@ public class UserController {
         viewModel.addAttribute("articles", articles);
 
         return "article/index";
+    }
+
+
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Richieste ricevute:");
+        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "admin/dashboard";
     }
 
     

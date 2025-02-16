@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragment :: head}" />
+
+<body>
+    <main class="min-vh-100">
+        <nav th:insert="~{fragment :: navbar}" />
+        <div class="container">
+            <div class="row">
+                <div th:insert="~{fragment :: errorMessage}"/>
+                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-center align-items-center flex-grow-1">
+                        <h1 th:text="${title}">Inserisci la tua richiesta</h1>
+                    </div>
+                </div>
+
+                <div class="col-12 my-5">
+                    <form th:action="@{/operations/career/request/store}" method="post" th:object="${careerRequest}" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email: </label>
+                            <input id="email" class="form-control" th:value="${#authentication.principal.username}" readonly>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="body" class="form-label">Motivo della richiesta:</label>
+                            <textarea id="body" class="form-control" th:field="*{body}" th:text="${param.body != null ? param.body[0] : ''}" placeholder="Inserisci una motivazione..." rows="6"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Per quale ruolo?</label>
+                            <select id="role" class="form-select" th:field="*{role}">
+                                <option th:each="role:${roles}" th:value="${role.id}" th:text="${#strings.substring(role.name, 5)}" ></option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Invia richiesta</button>
+
+
+
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+
+        <footer th:insert="~{fragment :: footer}" />
+        <script th:replace="~{fragment :: bootstrapJS}" />
+    </main>
+
+
+
+</body>
+
+</html>

@@ -15,7 +15,7 @@
 
 <body>
     <!-- NAVBAR -->
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary mb-5">
         <div class="container-fluid">
             <a class="navbar-brand" th:href="@{/}">The Aulab Chronicle</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -31,6 +31,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/article/index">Tutti gli articoli</a>
                     </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <div class="d-flex">
+                            <a class="nav-link" href="/admin/dashboard">Dashboard Admin</a>
+                        </div>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/article/index">Tutti gli articoli</a>
+                    </li> -->
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -52,8 +61,14 @@
         </div>
     </nav>
 
+    <!-- FLASH MESSAGE -->
     <div th:fragment="successMessage" th:if="${successMessage}" class="alert alert-success">
         <p th:text="${successMessage}"></p>
+    </div>
+
+
+    <div th:fragment="errorMessage" th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
     </div>
 
     <!-- FOOTER -->
@@ -63,7 +78,7 @@
             <!--Grid row-->
             <div class="row justify-content-evenly">
                 <!--Grid column-->
-                <div class="col-4 mb-4 mb-md-0">
+                <div class="col-5 mb-4 mb-md-0">
                     <h6 class="text-uppercase">Footer text</h6>
 
                     <p>
@@ -74,13 +89,12 @@
                 <!--Grid column-->
 
                 <!--Grid column-->
-                <div class="col-4 mb-4 mb-md-0">
-                    <h6 class="text-uppercase">Footer text</h6>
+                <div class="col-5 mb-4 mb-md-0">
+                    <h6 class="text-uppercase">Lavora con noi</h6>
 
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-                        molestias.
+                    <p class="fst-italic mb-3"> Chronicles si occupa di informazione e fact-checking. Entra nel team! 
                     </p>
+                    <a th:href="@{/operations/career/request}" class="btn btn-primary">Candidati</a>
                 </div>
                 <!--Grid column-->
             </div>
@@ -90,8 +104,8 @@
 
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2020 Copyright:
-            <a class="text-body" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+            © 2025 Copyright:
+            <a class="text-body">The Aulab Chronicle</a>
         </div>
         <!-- Copyright -->
     </footer>
