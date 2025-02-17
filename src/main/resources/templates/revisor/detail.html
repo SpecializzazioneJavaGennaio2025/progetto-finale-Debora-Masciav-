@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragment :: head}" />
+
+<body>
+    <nav th:insert="~{fragment :: navbar}" />
+    <div th:insert="~{fragment :: successMessage}" />
+    <div th:insert="~{fragment :: errorMessage}" />
+    <main class="min-vh-100">
+
+        <div class="container-fluid p-5 bg-secondary-subtle text-center">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <span class="h1">Dettagli articolo</span>
+                    <h2 th:text="${article.title}">Titolo</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 d-flex flex-column">
+                    <div class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img th:if="${article.image != null}" th:src="${article.image.path}"
+                                    th:alt="${article.title}" class="card-img-top">
+                                <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}"
+                                    th:alt="${article.title}" class="card-img-top">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <h2 th:text="${article.subtitle}"></h2>
+
+                        <p class="fs-5" th:if="${article.category != null}"> Categoria: <a
+                                th:href="@{/categories/search/{id}(id=${article.category.id})}"
+                                class="text-capitalize fw-bold text-muted"
+                                th:text="${article.category.name}">categoria</a></p>
+                        <p class="fs-5" th:if="${article.category == null}">Nessuna categoria</p>
+
+                        <div class="text-muted my-3">
+                            <span>Redatto il: </span><span th:text="${article.publishDate}">data</span>
+                            <br>
+                            <span>Autore: </span>
+                            <a class="text-muted" th:href="@{/search/{id}(id=${article.user.id})}">
+                                <span th:text="${article.user.username}">User</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p th:text="${article.body}">testo</p>
+                <div class="text-center">
+                    <a href="/revisor/dashboard" class="pointer text-secondary" onclick="goBack()">Torna indietro</a>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <form th:action="@{/article/accept(action='accept', articleId=${article.id})}" method="post">
+                        <button type="submit" class="btn btn-success">Accetta</button>
+                    </form>
+                    <form th:action="@{/article/accept(action='reject', articleId=${article.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Rifiuta</button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+
+    </main>
+    <footer th:insert="~{fragment :: footer}" />
+    <script th:replace="~{fragment :: bootstrapJS}" />
+</body>
+
+</html>

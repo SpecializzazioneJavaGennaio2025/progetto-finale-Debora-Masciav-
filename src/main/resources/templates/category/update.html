@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragment :: head}"/>
+<body>
+    <nav th:insert="~{fragment :: navbar}"/>
+    <div th:insert="~{fragment :: successMessage}"/>
+    <div th:insert="~{fragment :: errorMessage}"/>
+<main class="min-vh-100">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 my-5 d-flex justify-content-beetween align-items-center">
+                <div class="d-flex justify-content-center align-items-center flex-grow-1">
+                    <h1 th:text="${title}">Modifica la categoria</h1>
+                </div>
+            </div>
+<div class="col-12 my-5 align-items-center text-center">
+    <form th:action="@{/categories/update/{id}(id=${category.id})}" method="post" th:object="${category}">
+        <div class="row mb-3 justify-content-center align-items-center">
+            <div class="col-6">
+                <label for="name" class="form-label">Nome categoria:</label>
+                <input id="name" type="text" class="form-control" th:field="*{name}"
+                    placeholder="Inserisci il nome della categoria">
+                <p class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></p>
+            </div>
+        </div>
+        <a href="/admin/dashboard" class="btn btn-primary">Indietro</a>
+        <button type="submit" class="btn btn-success">Aggiorna</button>
+    </form>
+</div>
+
+
+
+        </div>
+    </div>
+    
+</main>
+<footer th:insert="~{fragment :: footer}"/>
+<script th:replace="~{fragment :: bootstrapJS}"/>
+</body>
+</html>

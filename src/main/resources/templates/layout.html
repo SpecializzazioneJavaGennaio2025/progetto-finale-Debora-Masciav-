@@ -2,20 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:insert="~{fragment :: head}"/>
 <body>
-    <nav th:insert="~{fragment :: navbar}"/>
-    <div th:insert="~{fragment :: successMessage}"/>
-    <div th:insert="~{fragment :: errorMessage}"/>
-<main class="min-vh-100">
-
-    <div class="container">
-        <div class="row justify-content-center my-5">
+    <main class="min-vh-100">
+        
+        <div class="container">
+            <div class="row">
+            <nav th:insert="~{fragment :: navbar}"/>
+            <div th:insert="~{fragment :: successMessage}"/>
+            <div th:insert="~{fragment :: errorMessage}"/>
             <div class="col-10">
             </div>
         </div>
     </div>
     
 </main>
-<footer th:insert="~{fragment :: footer}"/><
+<footer th:insert="~{fragment :: footer}"/>
 <script th:replace="~{fragment :: bootstrapJS}"/>
 </body>
 </html>

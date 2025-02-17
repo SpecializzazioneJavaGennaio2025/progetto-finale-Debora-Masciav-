@@ -21,7 +21,7 @@
                 <div class="carousel slide">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img th:if="${article.image != null}" th:src="@{$article.image.path}" th:alt="${article.title}" class="card-img-top">
+                            <img th:if="${article.image != null}" th:src="${article.image.path}" th:alt="${article.title}" class="card-img-top">
                             <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" th:alt="${article.title}" class="card-img-top">
                         </div>
                     </div>

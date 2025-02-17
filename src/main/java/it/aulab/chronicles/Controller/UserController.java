@@ -1,6 +1,7 @@
 package it.aulab.chronicles.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.aulab.chronicles.DTO.ArticleDTO;
 import it.aulab.chronicles.DTO.UserDTO;
 import it.aulab.chronicles.Model.User;
+import it.aulab.chronicles.Repository.ArticleRepository;
 import it.aulab.chronicles.Repository.CareerRequestRepository;
 import it.aulab.chronicles.Service.ArticleService;
 import it.aulab.chronicles.Service.CategoryService;
@@ -31,6 +33,9 @@ public class UserController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Autowired
     private CareerRequestRepository careerRequestRepository;
@@ -75,7 +80,9 @@ public class UserController {
         viewModel.addAttribute("title", "Tutti gli articoli dell'utente: " + user.getUsername());
 
         List<ArticleDTO> articles = articleService.searchByAuthor(user);
-        viewModel.addAttribute("articles", articles);
+
+        List<ArticleDTO> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        viewModel.addAttribute("articles", acceptedArticles);
 
         return "article/index";
     }
@@ -87,6 +94,14 @@ public class UserController {
         viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
         viewModel.addAttribute("categories", categoryService.readAll());
         return "admin/dashboard";
+    }
+
+
+    @GetMapping("/revisor/dashboard")
+    public String revisorDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Articoli da revisionare");
+        viewModel.addAttribute("articles", articleRepository.findByIsAcceptedNull());
+        return "revisor/dashboard";
     }
 
     

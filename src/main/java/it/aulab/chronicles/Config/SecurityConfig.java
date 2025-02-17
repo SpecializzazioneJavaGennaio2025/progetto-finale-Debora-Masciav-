@@ -30,6 +30,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/admin/**", "categories/update/{id}", "categories/delete/{id}", "categories/edit/{id}", "categories/create" ).hasRole("ADMIN")
+                .requestMatchers("/revisor/**", "/accept").hasRole("REVISOR")
                 .requestMatchers("/", "/register", "/auth/store", "/login", "/article/index", "/images/**", "article/detail/**", "categories/search/{id}", "search/{id}", "/error/**").permitAll()
                         // .requestMatchers("/").permitAll()
                         // .requestMatchers("/register/**").permitAll()

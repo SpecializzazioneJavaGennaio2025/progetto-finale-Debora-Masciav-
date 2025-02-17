@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,16 +51,28 @@ public class Article {
     @NotNull
     private LocalDate publishDate;
 
+    @Column(nullable = true)
+    private Boolean isAccepted;
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"articles"})
     private User user;
-
+    
     @ManyToOne
     @JsonIgnoreProperties({"articles"})
     private Category category;
-
+    
     @OneToOne(mappedBy = "article")
     @JsonIgnoreProperties({"article"})
     private Image image;
+
+
+    // public boolean getIsAccepted() {
+    //     return isAccepted;
+    // }
+
+    public void setIsAccepted(Boolean isAccepted) {
+        this.isAccepted = isAccepted;
+    }
 }
