@@ -47,7 +47,7 @@ public class Article {
     @Size(min = 2, max = 1000)
     private String body;
 
-    @Column(nullable = false, length = 8)
+    @Column(name = "publish_date", nullable = false, length = 8)
     @NotNull
     private LocalDate publishDate;
 
@@ -74,5 +74,20 @@ public class Article {
 
     public void setIsAccepted(Boolean isAccepted) {
         this.isAccepted = isAccepted;
+    }
+
+
+    @Override
+    public boolean equals(Object obj){
+        Article article = (Article) obj;
+        if (title.equals(article.getTitle()) &&
+        subtitle.equals(article.getSubtitle()) &&
+        body.equals(article.getBody()) &&
+        publishDate.equals(article.getPublishDate()) &&
+        category.equals(article.getCategory()) &&
+        image.getPath().equals(article.getImage().getPath())) {
+        return true;    
+        }
+        return false;
     }
 }

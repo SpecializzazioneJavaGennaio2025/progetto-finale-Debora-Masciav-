@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,7 +53,6 @@ public class ArticleController {
     public String articleIndex(Model viewModel) {
         viewModel.addAttribute("title", "Tutti gli articoli");
 
-
         List<ArticleDTO> articles = new ArrayList<ArticleDTO>();
         for (Article article : articleRepository.findByIsAcceptedTrue()) {
             articles.add(modelMapper.map(article, ArticleDTO.class));
@@ -93,6 +94,39 @@ public class ArticleController {
         return "article/detail";
     }
 
+    @GetMapping("/edit/{id}")
+    public String articleEdit(@PathVariable("id") Long id, Model viewModel){
+        viewModel.addAttribute("title", "Modifica l'articolo");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "article/edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel){
+        if(result.hasErrors()){
+            viewModel.addAttribute("title", "Modifica dell'articolo");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("categories", categoryService.readAll());
+            redirectAttributes.addFlashAttribute("errorMessage", "C'è stato un errore, riprova!");
+            return "article/edit";
+        }
+
+        articleService.update(id, article, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo!");
+
+        return "redirect:/article/index";
+    }
+
+
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato!");
+        return "redirect:/writer/dashboard";
+    }
+
 
     @GetMapping("/revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
@@ -100,20 +134,29 @@ public class ArticleController {
         viewModel.addAttribute("article", articleService.read(id));
         return "revisor/detail";
     }
+
     @PostMapping("/accept")
-    public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
+    public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId,
+            RedirectAttributes redirectAttributes) {
         if (action.equals("accept")) {
             articleService.setIsAccepted(true, articleId);
             redirectAttributes.addFlashAttribute("successMessage", "Articolo accettato!");
         } else if (action.equals("reject")) {
-                articleService.setIsAccepted(false, articleId);
-                redirectAttributes.addFlashAttribute("successMessage", "Articolo rifiutato!");
+            articleService.setIsAccepted(false, articleId);
+            redirectAttributes.addFlashAttribute("successMessage", "Articolo rifiutato!");
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Operazione non valida!");
         }
         return "redirect:/revisor/dashboard";
-}
-
-        
-
     }
+
+
+        @GetMapping("/search")
+        public String articleSearch(@Param("keyword") String keyword, Model viewModel){
+            viewModel.addAttribute("title", "Tutti gli articoli corrispondenti");
+            List<ArticleDTO> articles = articleService.search(keyword);
+            List<ArticleDTO> acceptedArticles = articles.stream().filter(article-> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+            viewModel.addAttribute("articles", acceptedArticles);
+            return "article/index";
+        }
+}

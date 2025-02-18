@@ -23,7 +23,7 @@ import it.aulab.chronicles.Repository.ArticleRepository;
 import it.aulab.chronicles.Repository.UserRepository;
 
 @Service
-public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
+public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
 
     @Autowired
     private UserRepository userRepository;
@@ -43,7 +43,6 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
         for (Article article : articleRepository.findAll()) {
             dtos.add(modelMapper.map(article, ArticleDTO.class));
 
-            
         }
         return dtos;
     }
@@ -63,13 +62,13 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
         String url = "";
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null){
+        if (authentication != null) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             User user = (userRepository.findById(userDetails.getId())).get();
             article.setUser(user);
         }
 
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
             try {
                 CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
                 url = futureUrl.get();
@@ -82,22 +81,67 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
         article.setIsAccepted(null);
 
         ArticleDTO dto = modelMapper.map(articleRepository.save(article), ArticleDTO.class);
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
             imageService.saveImageOnDb(url, article);
         }
         return dto;
     }
 
     @Override
-    public ArticleDTO update(Long key, Article model, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public ArticleDTO update(Long key, Article updatedArticle, MultipartFile file) {
+        String url = "";
+        if (articleRepository.existsById(key)) {
+            updatedArticle.setId(key);
+            Article article = articleRepository.findById(key).get();
+            updatedArticle.setUser(article.getUser());
+
+            if (!file.isEmpty()) {
+                try {
+                    imageService.deleteImage(article.getImage().getPath());
+                    try {
+                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                        url = futureUrl.get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    imageService.saveImageOnDb(url, updatedArticle);
+                    updatedArticle.setIsAccepted(null);
+                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDTO.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (article.getImage() == null) {
+                updatedArticle.setIsAccepted(article.getIsAccepted());
+            } else {
+                updatedArticle.setImage(article.getImage());
+                if (updatedArticle.equals(article) == false) {
+                    updatedArticle.setIsAccepted(null);
+                } else {
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDTO.class);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        if (articleRepository.existsById(key)) {
+            Article article = articleRepository.findById(key).get();
+            try {
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch (Exception e) {
+e.printStackTrace();            
+}
+articleRepository.deleteById(key);
+        } else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public List<ArticleDTO> searchByCategory(Category category) {
@@ -116,10 +160,18 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long>{
         return dtos;
     }
 
-    public void setIsAccepted(Boolean result, Long id){
+    public void setIsAccepted(Boolean result, Long id) {
         Article article = articleRepository.findById(id).get();
         article.setIsAccepted(result);
         articleRepository.save(article);
+    }
+
+    public List<ArticleDTO> search(String keyword) {
+        List<ArticleDTO> dtos = new ArrayList<ArticleDTO>();
+        for (Article article : articleRepository.search(keyword)) {
+            dtos.add(modelMapper.map(article, ArticleDTO.class));
+        }
+        return dtos;
     }
 
 }

@@ -1,5 +1,6 @@
 package it.aulab.chronicles.Controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,5 +105,12 @@ public class UserController {
         return "revisor/dashboard";
     }
 
+    @GetMapping("/writer/dashboard")
+public String writerDashboard(Model viewModel, Principal principal){
+    viewModel.addAttribute("title", "Articoli redatti");
+    List<ArticleDTO> userArticles = articleService.readAll().stream().filter(article->article.getUser().getEmail().equals(principal.getName())).toList();
+    viewModel.addAttribute("articles", userArticles);
+    return "writer/dashboard";
+}
     
 }
