@@ -1,2 +1,6 @@
-ALTER TABLE articles
-ADD COLUMN is_accepted BOOLEAN DEFAULT NULL;
+-- ALTER TABLE articles
+-- ADD COLUMN is_accepted BOOLEAN DEFAULT NULL;
+
+ALTER TABLE career_request
+ADD COLUMN is_reviewed BOOLEAN DEFAULT FALSE NOT NULL;
+

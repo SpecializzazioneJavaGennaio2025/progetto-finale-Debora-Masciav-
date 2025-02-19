@@ -31,6 +31,7 @@
     <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="post"><button class="btn btn-success m-2" type="submit">Accetta</button>
     </form>
     <a th:href="@{/admin/dashboard}" class="btn btn-primary m-2"> Torna indietro</a>
+    <form th:action="@{/operations/career/request/reject/{id}(id=${request.id})}" method="post"><button class="btn btn-danger m-2" type="submit">Rifiuta</button>
 </div>
                 </div>
         </div>

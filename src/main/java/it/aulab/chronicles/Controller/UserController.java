@@ -92,7 +92,7 @@ public class UserController {
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model viewModel) {
         viewModel.addAttribute("title", "Richieste ricevute:");
-        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse().stream().filter(request -> !request.getIsReviewed()).collect(Collectors.toList()));
         viewModel.addAttribute("categories", categoryService.readAll());
         return "admin/dashboard";
     }

@@ -83,4 +83,11 @@ public class OperationController {
         return "redirect:/admin/dashboard";
     }
 
+    @PostMapping("/career/request/reject/{requestId}")
+    public String careerRequestReject(@PathVariable Long requestId, RedirectAttributes redirectAttributes) {
+        careerRequestService.careerReject(requestId);
+        redirectAttributes.addFlashAttribute("successMessage", "Richiesta rifiutata");
+        return "redirect:/admin/dashboard";
+    }
+
 }

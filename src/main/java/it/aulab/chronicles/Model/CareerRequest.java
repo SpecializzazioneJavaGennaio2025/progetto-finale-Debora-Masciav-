@@ -26,6 +26,8 @@ public class CareerRequest {
     private String body;
     @Column
     private boolean isChecked;
+    @Column(name = "is_reviewed", nullable = false)
+    private boolean isReviewed;
 
     
     @OneToOne
@@ -42,6 +44,14 @@ public class CareerRequest {
     
     public void setIsChecked(boolean isChecked) {
         this.isChecked = isChecked;
+    }
+
+    public boolean getIsReviewed() {
+        return isReviewed;
+    }
+    
+    public void setIsReviewed(boolean isReviewed) {
+        this.isReviewed = isReviewed;
     }
    
 
