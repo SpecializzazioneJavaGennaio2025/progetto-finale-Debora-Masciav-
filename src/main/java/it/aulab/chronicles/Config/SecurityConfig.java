@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**", "categories/update/{id}", "categories/delete/{id}", "categories/edit/{id}", "categories/create" ).hasRole("ADMIN")
                 .requestMatchers("/writer/**", "/article/create", "/article/edit/{id}", "/article/update/{id}", "/article/delete/{id}").hasRole("WRITER")
                 .requestMatchers("/revisor/**", "/accept").hasRole("REVISOR")
-                .requestMatchers("/", "/register", "/auth/store", "/login", "/article/index", "/images/**", "article/detail/**", "categories/search/{id}", "search/{id}", "/error/**", "/article/search").permitAll()
+                .requestMatchers("/", "/register", "/auth/store", "/login", "/article/index", "/images/**", "article/detail/**", "article/show/**", "categories/search/{id}", "search/{id}", "/error/**", "/article/search").permitAll()
                         // .requestMatchers("/").permitAll()
                         // .requestMatchers("/register/**").permitAll()
                         // .requestMatchers("/auth/store").permitAll()

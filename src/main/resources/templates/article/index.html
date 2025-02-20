@@ -21,7 +21,7 @@
                           <h5 th:text="${article.title}"></h5>
                           <p class="fst-italic" th:text="${article.subtitle}">Change around the content for awsomenes</p>
                           <!-- <a th:href="@{detail/{id}(id=${article.id})}" class="btn btn-primary btn-sm">Read More</a> -->
-                          <a th:href="@{show/{slug}(slug=${article.slug})}" class="btn btn-primary btn-sm">Read More</a>
+                          <a th:href="@{detail/{id}(id=${article.slug})}" class="btn btn-primary btn-sm">Read More</a>
                         </div>
                       </div>                
                       <div class="col-sm-5">

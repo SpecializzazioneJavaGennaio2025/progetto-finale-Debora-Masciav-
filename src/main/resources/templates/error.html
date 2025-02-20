@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragment :: head}"/>
+<body>
+    <main class="min-vh-100">
+        
+        <div class="container">
+            <div class="row justify-content-center">
+            <nav th:insert="~{fragment :: navbar}"/>
+            <div th:insert="~{fragment :: successMessage}"/>
+            <div th:insert="~{fragment :: errorMessage}"/>
+            
+                <div class="error-container text-center col-10 my-5">
+                    <h1>Errore <span th:text="${errorCode}">500</span></h1>
+                    <p th:text="${errorMessage}">Si è verificato un errore.</p>
+                    <a th:href="@{/}" class="btn btn-primary">Torna alla Home</a>
+                </div>
+           
+        </div>
+    </div>
+    
+</main>
+<footer th:insert="~{fragment :: footer}"/>
+<script th:replace="~{fragment :: bootstrapJS}"/>
+</body>
+</html>

@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.aulab.chronicles.DTO.ArticleDTO;
@@ -85,17 +87,44 @@ public class ArticleController {
         return "redirect:/";
     }
 
-    @GetMapping("/detail/{id}")
-    public String articleShow(@PathVariable("id") Long id, Model viewModel) {
+    // @GetMapping(value= "/detail/{id}")
+    // public String articleShow(@PathVariable("id") Long id, Model viewModel) {
+    //     viewModel.addAttribute("title", "Dettaglio articolo");
+    //     viewModel.addAttribute("article", articleService.read(id));
+    //     return "article/detail";
+    // }
 
+    @GetMapping(value= "/detail/{id}")
+    public String articleShow(@PathVariable("id") String id, Model viewModel, RedirectAttributes redirectAttributes) {
+        Article article = null;
+        try {
+            Long articleId = Long.parseLong(id);
+             article = articleRepository.findById(articleId).
+            orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Articolo non trovato"));;
+            
+          
+
+        } catch (NumberFormatException e) {
+             article = articleRepository.findBySlug(id).get();
     
-        viewModel.addAttribute("title", "Dettaglio articolo");
-        viewModel.addAttribute("article", articleService.read(id));
-        return "article/detail";
+        }
+
+        if (article != null) {
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("title", "Dettaglio articolo");
+            return "article/detail";
+        } else {
+            // throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pagina non trovata");
+            redirectAttributes.addFlashAttribute("errorMessage", "Pagina non trovata");
+           return "redirect:/article/index";
+        }
     }
 
+
+   
+
     @GetMapping("/edit/{id}")
-    public String articleEdit(@PathVariable("id") Long id, Model viewModel){
+    public String articleEdit(@PathVariable("id") Long id, Model viewModel) {
         viewModel.addAttribute("title", "Modifica l'articolo");
         viewModel.addAttribute("article", articleService.read(id));
         viewModel.addAttribute("categories", categoryService.readAll());
@@ -103,8 +132,10 @@ public class ArticleController {
     }
 
     @PostMapping("/update/{id}")
-    public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article, BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel){
-        if(result.hasErrors()){
+    public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article,
+            BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file,
+            Model viewModel) {
+        if (result.hasErrors()) {
             viewModel.addAttribute("title", "Modifica dell'articolo");
             article.setImage(articleService.read(id).getImage());
             viewModel.addAttribute("article", article);
@@ -119,14 +150,12 @@ public class ArticleController {
         return "redirect:/article/index";
     }
 
-
     @GetMapping("/delete/{id}")
-    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         articleService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato!");
         return "redirect:/writer/dashboard";
     }
-
 
     @GetMapping("/revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
@@ -150,13 +179,13 @@ public class ArticleController {
         return "redirect:/revisor/dashboard";
     }
 
-
-        @GetMapping("/search")
-        public String articleSearch(@Param("keyword") String keyword, Model viewModel){
-            viewModel.addAttribute("title", "Tutti gli articoli corrispondenti");
-            List<ArticleDTO> articles = articleService.search(keyword);
-            List<ArticleDTO> acceptedArticles = articles.stream().filter(article-> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
-            viewModel.addAttribute("articles", acceptedArticles);
-            return "article/index";
-        }
+    @GetMapping("/search")
+    public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
+        viewModel.addAttribute("title", "Tutti gli articoli corrispondenti");
+        List<ArticleDTO> articles = articleService.search(keyword);
+        List<ArticleDTO> acceptedArticles = articles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        viewModel.addAttribute("articles", acceptedArticles);
+        return "article/index";
+    }
 }
