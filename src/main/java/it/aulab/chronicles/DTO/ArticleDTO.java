@@ -23,4 +23,5 @@ public class ArticleDTO {
     private User user;
     private Category category;
     private Image image;
+    private String slug;
 }

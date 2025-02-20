@@ -88,7 +88,7 @@ public class ArticleController {
     @GetMapping("/detail/{id}")
     public String articleShow(@PathVariable("id") Long id, Model viewModel) {
 
-        System.out.println("DEBUG: id" + id);
+    
         viewModel.addAttribute("title", "Dettaglio articolo");
         viewModel.addAttribute("article", articleService.read(id));
         return "article/detail";

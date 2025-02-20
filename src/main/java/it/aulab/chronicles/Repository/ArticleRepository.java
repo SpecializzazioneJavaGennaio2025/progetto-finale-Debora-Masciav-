@@ -1,6 +1,7 @@
 package it.aulab.chronicles.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -19,6 +20,7 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long>{
     List<Article> findByIsAcceptedTrue();
     List<Article> findByIsAcceptedFalse();
     List<Article> findByIsAcceptedNull();
+    Optional<Article> findBySlug(String slug);
 
 
     @Query("SELECT a FROM Article a WHERE " +

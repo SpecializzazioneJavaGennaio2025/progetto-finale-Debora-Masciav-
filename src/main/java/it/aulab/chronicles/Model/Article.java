@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
+import it.aulab.chronicles.Utils.StringManipulation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -53,6 +55,9 @@ public class Article {
 
     @Column(nullable = true)
     private Boolean isAccepted;
+
+    @Column(name = "slug", nullable = false, unique = true)
+    private String slug;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -89,5 +94,11 @@ public class Article {
         return true;    
         }
         return false;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void generateSlug() {
+        this.slug = StringManipulation.makeSlug(title);
     }
 }
