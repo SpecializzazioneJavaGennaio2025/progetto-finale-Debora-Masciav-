@@ -79,21 +79,6 @@ public class Article {
     }
 
 
-    // @Override
-    // public boolean equals(Object obj){
-    //     Article article = (Article) obj;
-    //     if (title.equals(article.getTitle()) &&
-    //     subtitle.equals(article.getSubtitle()) &&
-    //     body.equals(article.getBody()) &&
-    //     publishDate.equals(article.getPublishDate()) &&
-    //     category.equals(article.getCategory()) &&
-    //     image.getPath().equals(article.getImage().getPath())) {
-    //     return true;    
-    //     }
-    //     return false;
-    // }
-
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Article) {
