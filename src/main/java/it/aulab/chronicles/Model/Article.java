@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import it.aulab.chronicles.Utils.StringManipulation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -82,19 +79,28 @@ public class Article {
     }
 
 
+    // @Override
+    // public boolean equals(Object obj){
+    //     Article article = (Article) obj;
+    //     if (title.equals(article.getTitle()) &&
+    //     subtitle.equals(article.getSubtitle()) &&
+    //     body.equals(article.getBody()) &&
+    //     publishDate.equals(article.getPublishDate()) &&
+    //     category.equals(article.getCategory()) &&
+    //     image.getPath().equals(article.getImage().getPath())) {
+    //     return true;    
+    //     }
+    //     return false;
+    // }
+
+
     @Override
-    public boolean equals(Object obj){
-        Article article = (Article) obj;
-        if (title.equals(article.getTitle()) &&
-        subtitle.equals(article.getSubtitle()) &&
-        body.equals(article.getBody()) &&
-        publishDate.equals(article.getPublishDate()) &&
-        category.equals(article.getCategory()) &&
-        image.getPath().equals(article.getImage().getPath())) {
-        return true;    
+    public boolean equals(Object obj) {
+        if (obj instanceof Article) {
+            Article a = (Article) obj;
+            return this.title == a.title && this.subtitle == a.subtitle && this.body == a.body && this.publishDate == a.publishDate && this.category == a.category && this.image == a.image;
         }
         return false;
     }
-
 
 }

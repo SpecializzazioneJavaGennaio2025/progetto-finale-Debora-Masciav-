@@ -25,10 +25,10 @@ import it.aulab.chronicles.Repository.UserRepository;
 import it.aulab.chronicles.Utils.StringManipulation;
 
 @Service
-public class ArticleService implements CrudService<ArticleDTO, Article, Long> {    
+public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -79,8 +79,8 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
 
         }
 
-    String slug = generateUniqueSlug(article.getTitle(), article.getPublishDate());
-    article.setSlug(slug);
+        String slug = generateUniqueSlug(article.getTitle(), article.getPublishDate());
+        article.setSlug(slug);
 
         article.setIsAccepted(null);
 
@@ -114,8 +114,8 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (article.getImage() == null) {
-                updatedArticle.setIsAccepted(article.getIsAccepted());
+            // } else if (article.getImage() == null) {
+            //     updatedArticle.setIsAccepted(article.getIsAccepted());
             } else {
                 updatedArticle.setImage(article.getImage());
                 if (updatedArticle.equals(article) == false) {
@@ -123,6 +123,9 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
                 } else {
                     updatedArticle.setIsAccepted(article.getIsAccepted());
                 }
+
+               
+
                 return modelMapper.map(articleRepository.save(updatedArticle), ArticleDTO.class);
             }
         } else {
@@ -140,10 +143,10 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
                 article.getImage().setArticle(null);
                 imageService.deleteImage(path);
             } catch (Exception e) {
-e.printStackTrace();            
-}
-articleRepository.deleteById(key);
-        } else{
+                e.printStackTrace();
+            }
+            articleRepository.deleteById(key);
+        } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
@@ -179,16 +182,16 @@ articleRepository.deleteById(key);
     }
 
     // public String generateUniqueSlug(String title, LocalDate date) {
-    //     String baseSlug = StringManipulation.makeSlug(title);
-    //     String uniqueSlug = date + "-" + baseSlug;
-    //     int counter = 1;
+    // String baseSlug = StringManipulation.makeSlug(title);
+    // String uniqueSlug = date + "-" + baseSlug;
+    // int counter = 1;
 
-    //     while (articleRepository.existsBySlug(uniqueSlug)) {
-    //         uniqueSlug = baseSlug + "-" + counter;
-    //         counter++;
-    //     }
+    // while (articleRepository.existsBySlug(uniqueSlug)) {
+    // uniqueSlug = baseSlug + "-" + counter;
+    // counter++;
+    // }
 
-    //     return uniqueSlug;
+    // return uniqueSlug;
     // }
 
     public String generateUniqueSlug(String title, LocalDate date) {
@@ -200,7 +203,5 @@ articleRepository.deleteById(key);
         }
         return uniqueSlug;
     }
-   
-
 
 }

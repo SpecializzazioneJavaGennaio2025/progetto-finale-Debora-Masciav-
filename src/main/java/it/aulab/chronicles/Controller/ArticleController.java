@@ -139,16 +139,17 @@ public class ArticleController {
     public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article,
             BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file,
             Model viewModel) {
-        if (result.hasErrors()) {
-            viewModel.addAttribute("title", "Modifica dell'articolo");
-            article.setImage(articleService.read(id).getImage());
-            viewModel.addAttribute("article", article);
-            viewModel.addAttribute("categories", categoryService.readAll());
-            redirectAttributes.addFlashAttribute("errorMessage", "C'è stato un errore, riprova!");
-            return "article/edit";
-        }
+                if (result.hasErrors()) {
+                    viewModel.addAttribute("title", "Modifica dell'articolo");
+                    article.setImage(articleService.read(id).getImage());
+                    viewModel.addAttribute("article", article);
+                    viewModel.addAttribute("categories", categoryService.readAll());
+                    redirectAttributes.addFlashAttribute("errorMessage", "C'è stato un errore, riprova!");
+                    return "article/edit";
+                }
+                
 
-        articleService.update(id, article, file);
+                articleService.update(id, article, file);
         redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo!");
 
         return "redirect:/article/index";
