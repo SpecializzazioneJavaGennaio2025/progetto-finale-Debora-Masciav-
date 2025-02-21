@@ -21,6 +21,8 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long>{
     List<Article> findByIsAcceptedFalse();
     List<Article> findByIsAcceptedNull();
     Optional<Article> findBySlug(String slug);
+    List<Article> findAllBySlug(String slug);
+    boolean existsBySlug(String slug);
 
 
     @Query("SELECT a FROM Article a WHERE " +
@@ -32,4 +34,8 @@ public interface ArticleRepository extends ListCrudRepository<Article, Long>{
             "ORDER BY a.title ASC"
             )
     List<Article> search(@Param("searchTerm") String searchTerm);
+
+
+    @Query("SELECT COUNT(a) FROM Article a where a.slug like concat(:slug, '%')")
+    int getMaxSlug(@Param("slug") String slug);
 }

@@ -1,6 +1,7 @@
 package it.aulab.chronicles.Service;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +22,13 @@ import it.aulab.chronicles.Model.Category;
 import it.aulab.chronicles.Model.User;
 import it.aulab.chronicles.Repository.ArticleRepository;
 import it.aulab.chronicles.Repository.UserRepository;
+import it.aulab.chronicles.Utils.StringManipulation;
 
 @Service
-public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
-
+public class ArticleService implements CrudService<ArticleDTO, Article, Long> {    
     @Autowired
     private UserRepository userRepository;
-
+    
     @Autowired
     private ModelMapper modelMapper;
 
@@ -77,6 +78,9 @@ public class ArticleService implements CrudService<ArticleDTO, Article, Long> {
             }
 
         }
+
+    String slug = generateUniqueSlug(article.getTitle(), article.getPublishDate());
+    article.setSlug(slug);
 
         article.setIsAccepted(null);
 
@@ -173,5 +177,30 @@ articleRepository.deleteById(key);
         }
         return dtos;
     }
+
+    // public String generateUniqueSlug(String title, LocalDate date) {
+    //     String baseSlug = StringManipulation.makeSlug(title);
+    //     String uniqueSlug = date + "-" + baseSlug;
+    //     int counter = 1;
+
+    //     while (articleRepository.existsBySlug(uniqueSlug)) {
+    //         uniqueSlug = baseSlug + "-" + counter;
+    //         counter++;
+    //     }
+
+    //     return uniqueSlug;
+    // }
+
+    public String generateUniqueSlug(String title, LocalDate date) {
+        String baseSlug = StringManipulation.makeSlug(title);
+        String uniqueSlug = date + "-" + baseSlug;
+        int counter = articleRepository.getMaxSlug(uniqueSlug);
+        if (counter > 0) {
+            uniqueSlug = baseSlug + "-" + counter;
+        }
+        return uniqueSlug;
+    }
+   
+
 
 }

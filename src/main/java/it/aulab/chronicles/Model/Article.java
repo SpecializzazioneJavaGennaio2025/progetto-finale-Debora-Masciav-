@@ -96,9 +96,5 @@ public class Article {
         return false;
     }
 
-    @PrePersist
-    @PreUpdate
-    public void generateSlug() {
-        this.slug = StringManipulation.makeSlug(title);
-    }
+
 }

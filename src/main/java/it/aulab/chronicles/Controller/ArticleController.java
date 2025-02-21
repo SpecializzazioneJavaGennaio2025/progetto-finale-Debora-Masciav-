@@ -75,13 +75,17 @@ public class ArticleController {
     @PostMapping("/store")
     public String articleStore(@Valid @ModelAttribute("article") Article article, BindingResult result,
             RedirectAttributes redirectAttributes, Principal principal, MultipartFile file, Model viewModel) {
+                String slug = articleService.generateUniqueSlug(article.getTitle(), article.getPublishDate());
+    article.setSlug(slug);
         if (result.hasErrors()) {
             viewModel.addAttribute("title", "Crea un articolo");
             viewModel.addAttribute("article", article);
+            
+            
             viewModel.addAttribute("categories", categoryService.readAll());
             return "article/create";
         }
-
+        
         articleService.create(article, principal, file);
         redirectAttributes.addFlashAttribute("successMessage", "Articolo aggiunto con successo!");
         return "redirect:/";
