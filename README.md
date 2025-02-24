@@ -23,9 +23,9 @@
     - Completamento CRUD di Article
 
 # EXTRA:
-- Campanella di notifica ottimizzata
-- Query di ricerca full text migliorata
-- Ritorno alla revisione per gli articoli modificati
-- Slug URL nel dettaglio degli article
-- Feedback dello stato di revisione nella Dashboard Writer
-- Error Controller
+    - Campanella di notifica ottimizzata
+    - Query di ricerca full text migliorata
+    - Ritorno alla revisione per gli articoli modificati
+    - Slug URL nel dettaglio degli article
+    - Feedback dello stato di revisione nella Dashboard Writer
+    - Error Controller
